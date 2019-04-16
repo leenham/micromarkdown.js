@@ -29,13 +29,17 @@ var micromarkdown = {
     include: /[\[<]include (\S+) from (https?:\/\/[a-z0-9\.\-]+\.[a-z]{2,9}[a-z0-9\.\-\?\&\/]+)[\]>]/gi,
     url: /<([a-zA-Z0-9@:%_\+.~#?&\/=]{2,256}\.[a-z]{2,4}\b(\/[\-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)>/g,
     url2: /[ \t\n]([a-zA-Z]{2,16}:\/\/[a-zA-Z0-9@:%_\+.~#?&=]{2,256}.[a-z]{2,4}\b(\/[\-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)[ \t\n]/g,
-    hcomment: /\[([^\]]+)\]\/\*(.*)\*\//g
+    hcomment: /\[([^\]]+)\]\/\*(.*)\*\//g,
+    declare : /\[var[ ]+([A-Za-z_\$][A-Za-z_\$0-9]*)[ ]*=[ ]*([^ ;]*)[ ]*;[ ]*\]/g,
+    variable : /\[([A-Za-z_\$][A-Za-z_\$0-9]*)\]/g
+    
   },
   codeblocks: {},
   parse: function (str, strict) {
     'use strict';
     var line, nstatus = 0,
       status, cel, calign, indent, helper, helper1, helper2, count, repstr, stra, trashgc = [],
+      v_sets = [],
       casca = 0,
       i = 0,
       j = 0,
@@ -55,6 +59,18 @@ var micromarkdown = {
       str = str.replace(stra[0], ' §§§' + crc32str + '§§§ '); 
     }
 
+    /*After dealing with <code>, then deal with variables by substitude all the variable into values.*/
+    /* declaration */
+    while ((stra = micromarkdown.regexobject.declare.exec(str)) !== null){
+    	v_sets[stra[1]] = stra[2];
+    	str = str.replace(stra[0],"");
+    }
+    /* apply all variables*/
+    while ((stra = micromarkdown.regexobject.variable.exec(str)) !== null){
+    	if(v_sets[stra[1]]!==undefined){
+    		str = str.replace(stra[0],v_sets[stra[1]]);
+    	}
+    }
     /* headlines */
     while ((stra = micromarkdown.regexobject.headline.exec(str)) !== null) {
       count = stra[1].length;

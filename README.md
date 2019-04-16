@@ -56,6 +56,28 @@ There is also a [Testpage](http://simonwaldherr.github.io/micromarkdown.js/test.
 Feel free to contact me via [eMail](mailto:contact@simonwaldherr.de) or on [Twitter](http://twitter.com/simonwaldherr). This software will be continually developed. Suggestions and tips are always welcome.
 
 ## roro wants to add three function:
-1. Add new keywords to show comments when mouse hovers on certain tag. Comments should be raw text and pre-written.
-2. Allow a random paragraph or graph to be served as comments.
-3. Comments can be shown recursively.
+1. Add new keywords to show comments when mouse hovers on certain tag. Comments should be raw text and pre-written.[Finished]
+2. Use variables while editing *markdown* text.[Finished]
+
+---
+
+## my solution:
+
+1. Grammar : 
+'''
+[text]/*float comments only shown when mouse hove on text */
+'''
+* Add a new regex item called : *hcomment* as well as its expression 
+* define two kinds of css style class. one for static text and the other one for floating text.
+* parse the text and comment parts then convert them into html tags
+
+2. Grammar :
+'''
+[var author = roro;]
+[var img2 = [imgName](imglink);]
+Here [author] use the image:[img2] to give an example.
+
+Attention: 
+* You can only declare one variable at one time. 
+* Each declaration must be ended with ';'
+* The Strategy I choose is text substitution.(After parsing code, before parsing the rest grammars)
