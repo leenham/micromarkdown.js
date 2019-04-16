@@ -54,3 +54,8 @@ There is also a [Testpage](http://simonwaldherr.github.io/micromarkdown.js/test.
 ## contact
 
 Feel free to contact me via [eMail](mailto:contact@simonwaldherr.de) or on [Twitter](http://twitter.com/simonwaldherr). This software will be continually developed. Suggestions and tips are always welcome.
+
+## roro wants to add three function:
+1. Add new keywords to show comments when mouse hovers on certain tag. Comments should be raw text and pre-written.
+2. Allow a random paragraph or graph to be served as comments.
+3. Comments can be shown recursively.
