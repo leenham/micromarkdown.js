@@ -20,7 +20,7 @@ var micromarkdown = {
     code: /\s\`\`\`\n?([^`]+)\`\`\`/g,
     hr: /^(?:([\*\-_] ?)+)\1\1$/gm,
     lists: /^((\s*((\*|\-)|\d(\.|\))) [^\n]+)\n)+/gm,
-    bolditalic: /(?:([\*_~]{1,3}))([^\*_~\n]+[^\*_~\s])\1/g,
+    bolditalic: /(?:([^\/][\*_~]{1,3}))([^\*_~\n]+[^\*_~\s])\1/g,
     links: /!?\[([^\]<>]+)\]\(([^ \)<>]+)( "[^\(\)\"]+")?\)/g,
     reflinks: /\[([^\]]+)\]\[([^\]]+)\]/g,
     smlinks: /\@([a-z0-9]{3,})\@(t|gh|fb|gp|adn)/gi,
@@ -28,7 +28,8 @@ var micromarkdown = {
     tables: /\n(([^|\n]+ *\| *)+([^|\n]+\n))((:?\-+:?\|)+(:?\-+:?)*\n)((([^|\n]+ *\| *)+([^|\n]+)\n)+)/g,
     include: /[\[<]include (\S+) from (https?:\/\/[a-z0-9\.\-]+\.[a-z]{2,9}[a-z0-9\.\-\?\&\/]+)[\]>]/gi,
     url: /<([a-zA-Z0-9@:%_\+.~#?&\/=]{2,256}\.[a-z]{2,4}\b(\/[\-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)>/g,
-    url2: /[ \t\n]([a-zA-Z]{2,16}:\/\/[a-zA-Z0-9@:%_\+.~#?&=]{2,256}.[a-z]{2,4}\b(\/[\-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)[ \t\n]/g
+    url2: /[ \t\n]([a-zA-Z]{2,16}:\/\/[a-zA-Z0-9@:%_\+.~#?&=]{2,256}.[a-z]{2,4}\b(\/[\-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)[ \t\n]/g,
+    hcomment: /\[([^\]]+)\]\/\*(.*)\*\//g
   },
   codeblocks: {},
   parse: function (str, strict) {
@@ -240,6 +241,13 @@ var micromarkdown = {
     /* horizontal line */
     while ((stra = micromarkdown.regexobject.hr.exec(str)) !== null) {
       str = str.replace(stra[0], '\n<hr/>\n');
+    }
+
+	/* hover comments */
+    while ((stra = micromarkdown.regexobject.hcomment.exec(str)) !== null) {
+      repstr = '<span ' + 'class="' + 'static_span' + '">' + stra[1] 
+      repstr += '<div ' + 'class="' + 'float_comment' + '">' + stra[2] + '</div>' + '</span>';;
+      str = str.replace(stra[0], repstr);
     }
 
     /* include */
