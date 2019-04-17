@@ -81,3 +81,6 @@ Attention:
 * You can only declare one variable at one time. 
 * Each declaration must be ended with ';'
 * The Strategy I choose is text substitution.(After parsing code, before parsing the rest grammars)
+
+Existing bugs:
+* declarations cannot be performed row by row, otherwise the interpreter will go wrooooong. I do not know Y. 
