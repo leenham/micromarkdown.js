@@ -64,21 +64,21 @@ Feel free to contact me via [eMail](mailto:contact@simonwaldherr.de) or on [Twit
 ## v1.0 implement above functions
 
 1. Grammar : 
-'''
+```
 [text]/*float comments only shown when mouse hove on text */
-'''
+```
 * Add a new regex item called : *hcomment* as well as its expression 
 * define two kinds of css style class. one for static text and the other one for floating text.
 * parse the text and comment parts then convert them into html tags
 
 2. Grammar :
-'''
+```
 [Declaration Example]:wrapped by '[]', started with 'var ', ended up with ';'
 [var author = roro;]  
 [var img2 = [imgName](imglink);]
 [Useage Example]:wrapped by '[]', ended up with ';',contents must be variable pre-declared.
 There should be an image : [img2;]
-'''
+```
 
 3. Fix some fatal bugs:
 * Bugs: Could not declare multiply variables continuously.
