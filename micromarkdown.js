@@ -29,9 +29,9 @@ var micromarkdown = {
     include: /[\[<]include (\S+) from (https?:\/\/[a-z0-9\.\-]+\.[a-z]{2,9}[a-z0-9\.\-\?\&\/]+)[\]>]/gi,
     url: /<([a-zA-Z0-9@:%_\+.~#?&\/=]{2,256}\.[a-z]{2,4}\b(\/[\-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)>/g,
     url2: /[ \t\n]([a-zA-Z]{2,16}:\/\/[a-zA-Z0-9@:%_\+.~#?&=]{2,256}.[a-z]{2,4}\b(\/[\-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)[ \t\n]/g,
-    hcomment: /\[([^\]]+)\]\/\*(.*)\*\//g,
-    declare : /\[var[ ]+([A-Za-z_\$][A-Za-z_\$0-9]*)[ ]*=[ ]*([^ ;]*)[ ]*;[ ]*\]/g,
-    variable : /\[([A-Za-z_\$][A-Za-z_\$0-9]*)\]/g
+    hcomment: /\[([^\] ]+)\]\/\*([^\/\*]*?)\*\//g,
+    declaration : /\[var[ ]+([A-Za-z_\$][A-Za-z_\$0-9]*?)[ ]*=[ ]*([^;]*?);\]/gm,
+    variable : /\[([A-Za-z_\$][A-Za-z_\$0-9]*);\]/g
     
   },
   codeblocks: {},
@@ -52,6 +52,22 @@ var micromarkdown = {
 
     str = str.replace('$&', '&#x0024&amp;');
 
+	/* deal with variables by substitude all the variable into values.*/
+    /* declaration */
+    while ((stra = micromarkdown.regexobject.declaration.exec(str)) !== null){
+    	v_sets[stra[1]] = stra[2];
+    	str = str.replace(stra[0],'');
+    	
+    }
+    /* apply all variables*/
+    while ((stra = micromarkdown.regexobject.variable.exec(str)) !== null){
+    	if(v_sets[stra[1]]!==undefined){
+    		str = str.replace(stra[0],v_sets[stra[1]]);
+    		
+    	}
+
+    }
+
     /* code */
     while ((stra = micromarkdown.regexobject.code.exec(str)) !== null) {
       crc32str = micromarkdown.crc32(stra[0]);
@@ -59,18 +75,7 @@ var micromarkdown = {
       str = str.replace(stra[0], ' §§§' + crc32str + '§§§ '); 
     }
 
-    /*After dealing with <code>, then deal with variables by substitude all the variable into values.*/
-    /* declaration */
-    while ((stra = micromarkdown.regexobject.declare.exec(str)) !== null){
-    	v_sets[stra[1]] = stra[2];
-    	str = str.replace(stra[0],"");
-    }
-    /* apply all variables*/
-    while ((stra = micromarkdown.regexobject.variable.exec(str)) !== null){
-    	if(v_sets[stra[1]]!==undefined){
-    		str = str.replace(stra[0],v_sets[stra[1]]);
-    	}
-    }
+    
     /* headlines */
     while ((stra = micromarkdown.regexobject.headline.exec(str)) !== null) {
       count = stra[1].length;
@@ -261,8 +266,10 @@ var micromarkdown = {
 
 	/* hover comments */
     while ((stra = micromarkdown.regexobject.hcomment.exec(str)) !== null) {
+ 
       repstr = '<span ' + 'class="' + 'static_span' + '">' + stra[1] 
-      repstr += '<div ' + 'class="' + 'float_comment' + '">' + stra[2] + '</div>' + '</span>';;
+      repstr += '<div ' + 'class="' + 'float_comment' + '">' + stra[2] + '</div>' + '</span>';
+      
       str = str.replace(stra[0], repstr);
     }
 

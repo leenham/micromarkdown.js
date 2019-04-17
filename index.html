@@ -14,7 +14,7 @@
     border-radius: 5px;
     display:none;
     left:20px;
-    bottom:-10px;
+    bottom:-30px;
     z-index: 1000;
     text-shadow:0px 0px 0px;
     padding:5px 10px 5px 10px;
@@ -25,9 +25,8 @@
     word-break: normal;
   }
 .static_span{
-    position: absolute;
+    position: relative;
     display:inline-block;
-    padding-left: 5px;
     text-shadow:0px 0px 2px rgba(0,0,0,0.5)
   }
 .static_span:hover .float_comment{
@@ -96,9 +95,29 @@
   </table>
   <code id="defaultmd">
 <!--
+Area for displaying new functions:[features;]
+---
+## 公司名称:拜椰特[1]
+[企业故事]/*拜椰特（上海）软件技术有限公司不仅仅是在开发编程工具，而是研发提高软件生产效率的软引擎。*/
+<br><br>
+[公司团队]/*欢迎具有研发热情、喜欢挑战、渴望成功、希望用智慧用技术创造来重塑行业进而改变自已的技术狂热者们加入拜椰特！*/
+<br><br>
+[location;]
 
+[var location=[地理位置]/*拜椰特（上海）软件技术有限公司坐落于上海市浦东新区自由贸易试验区张江高科晨晖路258号G座1楼。*/;]
+
+[1]:以上内容均摘抄自[拜椰特官网](http://www.beelili.com).
+
+By using floating comments, you can:<br>
+
+
+By using variables , you can:<br>
+
+[var img = ![img](homepage.png);]
+
+---
 #![µmd.js](http://simonwaldherr.de/umd.png)
-
+[var features = [功能]/*1.添加了在浮动框中显示注释的功能。<br>2.添加了在编辑markdown语法时可以使用变量的功能。<br>*/;]
 a tiny script to convert [markdown](http://en.wikipedia.org/wiki/Markdown) to [HTML](http://en.wikipedia.org/wiki/HTML) in under 5kb and under [MIT License](http://opensource.org/licenses/MIT).  
 
 ```
