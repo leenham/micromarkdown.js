@@ -55,13 +55,13 @@ There is also a [Testpage](http://simonwaldherr.github.io/micromarkdown.js/test.
 
 Feel free to contact me via [eMail](mailto:contact@simonwaldherr.de) or on [Twitter](http://twitter.com/simonwaldherr). This software will be continually developed. Suggestions and tips are always welcome.
 
-## roro wants to add three function:
+## roro wants to add two functions:
 1. Add new keywords to show comments when mouse hovers on certain tag. Comments should be raw text and pre-written.[Finished]
 2. Use variables while editing *markdown* text.[Finished]
 
 ---
 
-## my solution:
+## v1.0 implement above functions
 
 1. Grammar : 
 '''
@@ -73,14 +73,17 @@ Feel free to contact me via [eMail](mailto:contact@simonwaldherr.de) or on [Twit
 
 2. Grammar :
 '''
-[var author = roro;]
+[Declaration Example]:wrapped by '[]', started with 'var ', ended up with ';'
+[var author = roro;]  
 [var img2 = [imgName](imglink);]
-Here [author] use the image:[img2] to give an example.
+[Useage Example]:wrapped by '[]', ended up with ';',contents must be variable pre-declared.
+There should be an image : [img2;]
+'''
 
-Attention: 
-* You can only declare one variable at one time. 
-* Each declaration must be ended with ';'
-* The Strategy I choose is text substitution.(After parsing code, before parsing the rest grammars)
+3. Fix some fatal bugs:
+* Bugs: Could not declare multiply variables continuously.
+Solution: Regexp modified by 'g' will record 'lastIndex' where it ends up match, and start at 'lastIndex' no matter what string/content is in next match. In naive markdown grammar, you only have to add html tags to the origin text, which luckily and implicitly avoids this problem. In my implementation, the declaration should be substituted with empty string, which shorten the origin text, resulting in bugs in continuous declaration. Remove 'g' descriptor in the regexp to fix this bug.
 
-Existing bugs:
-* declarations cannot be performed row by row, otherwise the interpreter will go wrooooong. I do not know Y. 
+* Bugs: Grammar confliction
+Solution: Carefully design regexp to fix this bug. My solution is to use token ';' while using variable(by detecting ';' in variable regexp) and avoid ';' to be shown in other regexp.
+
